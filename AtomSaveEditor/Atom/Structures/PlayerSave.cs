@@ -134,7 +134,26 @@ namespace AtomSaveEditor.Atom.PlayerSave
         public string Proto { get; set; }
     }
 
-    public partial class Conditions
+	public partial class Memo
+	{
+		[JsonProperty("count")]
+		[JsonConverter(typeof(FluffyParseStringConverter))]
+		public long Count { get; set; }
+
+		[JsonProperty("proto")]
+		public string Proto { get; set; }
+
+		[JsonProperty("keywords", NullValueHandling = NullValueHandling.Ignore)]
+		public MemoKeywords Keywords { get; set; }
+	}
+
+	public class MemoKeywords
+	{
+		[JsonProperty("__MEMO_SEEN")]
+		public string Seen { get; set; }
+	}
+
+	public partial class Conditions
     {
         [JsonProperty("toxic")]
         [JsonConverter(typeof(FluffyParseStringConverter))]
@@ -398,7 +417,7 @@ namespace AtomSaveEditor.Atom.PlayerSave
         public List<string> Scale { get; set; }
     }
 
-    public enum Class { Ammo, Consumable, Item, Uniform, Weapon };
+    public enum Class { Ammo, Consumable, Item, Uniform, Weapon, Memo };
 
     public partial class PlayerSave
     {
@@ -507,6 +526,8 @@ namespace AtomSaveEditor.Atom.PlayerSave
                     return Class.Uniform;
                 case "Weapon":
                     return Class.Weapon;
+				case "Memo":
+                    return Class.Memo;
             }
             throw new Exception("Cannot unmarshal type Class");
         }
@@ -535,6 +556,9 @@ namespace AtomSaveEditor.Atom.PlayerSave
                     return;
                 case Class.Weapon:
                     serializer.Serialize(writer, "Weapon");
+                    return;
+				case Class.Memo:
+                    serializer.Serialize(writer, "Memo");
                     return;
             }
             throw new Exception("Cannot marshal type Class");
