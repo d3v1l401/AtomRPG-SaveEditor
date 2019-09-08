@@ -75,18 +75,23 @@ namespace AtomSaveEditor
         
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var newSaveBuffer = this._sh.Pack();
-            DialogResult dialogResult = MessageBox.Show("Do you want to replace the save file?", "Replace save file", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+	        var newSaveBuffer = _sh.Pack();
+	        var dialogResult = MessageBox.Show("Do you want to replace the save file?", "Replace save file",
+		        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (dialogResult == DialogResult.Yes) {
-                File.Delete(_currentFilePath);
-                File.WriteAllBytes(_currentFilePath, newSaveBuffer);
-                MessageBox.Show("Save file successfully overwritten.", "Operation complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else if (dialogResult == DialogResult.No) {
-                File.WriteAllBytes(_currentFilePath + "_modded.as", newSaveBuffer);
-                MessageBox.Show("Save file successfully written.", "Operation complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
+	        if (dialogResult == DialogResult.Yes)
+	        {
+		        File.Delete(_currentFilePath);
+		        File.WriteAllBytes(_currentFilePath, newSaveBuffer);
+	        }
+	        else if (dialogResult == DialogResult.No)
+	        {
+		        File.WriteAllBytes(_currentFilePath + "_modded.as", newSaveBuffer);
+	        }
+
+	        MessageBox.Show("Save file successfully overwritten.", "Operation complete", MessageBoxButtons.OK,
+		        MessageBoxIcon.Information);
+		}
 
         SkillEdit _skEdit = null;
         PerkEdit _pEdit = null;
